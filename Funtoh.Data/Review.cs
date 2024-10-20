@@ -1,4 +1,6 @@
-﻿namespace Funtoh.Data;
+﻿using System.Text.Json.Serialization;
+
+namespace Funtoh.Data;
 
 public enum ReviewerType
 {
@@ -16,5 +18,6 @@ public record Review(
     int Stars,
     string? Comment)
 {
+    [JsonIgnore]
     public Profile ReviewByProfile { get; set; } = Profile.Empty;
 };

@@ -13,6 +13,16 @@
             <div class="heading text-secondary mt-4 mb-2">About me</div>
             <div>@Profile.Description</div>
 
+            @* Contacts *@
+            <div class="row mt-4">
+                @foreach (var contact in Profile.Contacts)
+                {
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <ContactItem Contact="@contact"/>
+                    </div>
+                }
+            </div>
+            
             @* Specialties *@
             @if (Profile.Specialties.IsNotEmpty())
             {

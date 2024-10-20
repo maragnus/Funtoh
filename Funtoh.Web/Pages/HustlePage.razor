@@ -2,6 +2,12 @@
 @page "/hustles/{HustleName}"
 @{
     var applyUrl = $"/hustles/{Hustle.HustleId}/apply";
+    var similarUrl = Hustle.Type == HustleType.Promoter
+        ? $"/search/sponsor/hustles/{Hustle.HustleId}/similar"
+        : $"/search/promoter/hustles/{Hustle.HustleId}/similar";
+    var createUrl = Hustle.Type == HustleType.Promoter
+        ? $"/search/sponsor/create/{Hustle.HustleId}"
+        : $"/search/promoter/create/{Hustle.HustleId}";
 }
 
 @inject DataContext DataContext
@@ -71,15 +77,17 @@
                 </div>
             </div>
 
-            <div>
+            <div class="horizontal-list">
                 @if (Hustle.Type == HustleType.Promoter)
                 {
-                    <button class="btn btn-primary" href="@applyUrl">Apply to Promote @Hustle.Brand</button>
+                    <a class="btn btn-primary" href="@applyUrl">Apply to Promote @Hustle.Brand</a>
                 }
                 else
                 {
-                    <button class="btn btn-primary" href="@applyUrl">Hire this Promoter</button>
+                    <a class="btn btn-primary" href="@applyUrl">Hire this Promoter</a>
                 }
+                <a class="btn btn-secondary" href="@similarUrl">Similar hustles</a>
+                <a class="btn btn-tertiary" href="@createUrl">Create hustle</a>
             </div>
 
             @* <div class="heading text-secondary mt-4 mb-2">Related Hustles</div> *@

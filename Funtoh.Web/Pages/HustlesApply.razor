@@ -1,0 +1,33 @@
+﻿@page "/hustles/{HustleId:guid}/apply"
+
+<div class="container-md">
+    <div class="row p-4 justify-content-md-center">
+        <div class="col-12 col-md-6 mb-4">
+            <h1 class="h2 text-secondary text-center mb-4">Mockup is under construction</h1>
+
+            <div class="card">
+                <img src="img/construction.webp" class="card-img-top"/>
+                <div class="card-body">
+                    <p class="card-text">
+                        Whoa, whoa, whoa! 🚧 You’ve just stumbled into a part of the website that’s still in the oven. Yeah, we’re talkin’ under construction here—hammers, nails, the whole works. 🔨⚡️
+                    </p>
+                    <p class="card-text">
+                        Don’t worry, though! We’ll have this bad boy up and running faster than you can say “chimichanga.” In the meantime, why not head back and check out some of the other awesome sections that aren’t full of digital sawdust? 😉
+                    </p>
+                    <p class="card-text">
+                        Catch you soon, champ! 😎👷‍♂️
+                    </p>
+                    <p class="card-text">
+                        <button class="btn btn-primary" onclick="history.back()">Head on back</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public Guid? HustleId { get; set; }
+
+}

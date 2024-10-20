@@ -46,6 +46,9 @@ public class DataContext
         // using var file = File.OpenRead(@"W:\Funtoh\Data\DataFile.json") ?? throw new Exception("Could not open data file");
         var dataFile = JsonSerializer.Deserialize<DataFile>(file, JsonOptions) ??
                        throw new Exception("Could not deserialize data file");
+        Random.Shared.Shuffle(dataFile.Hustles);
+        Random.Shared.Shuffle(dataFile.Profiles);
+
         _hustles.AddRange(dataFile.Hustles);
         _profiles.AddRange(dataFile.Profiles);
         _profileById = dataFile.Profiles.ToDictionary(p => p.ProfileId);

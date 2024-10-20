@@ -82,4 +82,10 @@
     [Parameter] public bool ShowReviews { get; set; }
     [Parameter] public bool ShowLocation { get; set; }
     [Parameter] public bool ShowLanguages { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Profile ??= Profile.Empty;
+    }
+
 }

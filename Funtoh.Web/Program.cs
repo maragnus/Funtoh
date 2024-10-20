@@ -1,5 +1,5 @@
 using Funtoh.Data;
-using Funtoh.Web.Components;
+using Funtoh.Web;
 using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -37,6 +37,18 @@ a, .btn-link {
     border-color: var(--bs-tertiary);
 }
 
+.btn-secondary {
+    color: #fff;
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-tertiary {
+    color: #fff;
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+}
+
 .main-layout {
     display: flex;
     min-height: 100vh;
@@ -45,6 +57,23 @@ a, .btn-link {
 
 .main-layout > div {
     flex: 1
+}
+
+.app-layout {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.app-layout > nav {
+    flex: 1;
+}
+
+.app-layout > main {
+    flex-grow: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .funtoh-blue {
@@ -66,6 +95,10 @@ ul.footer-link-list {
         flex-direction: column;
         gap: 0;
     }  
+}
+
+.full-screen {
+    
 }
 
 .main-footer {
@@ -117,6 +150,15 @@ ul.footer-link-list {
     gap: 1rem;
 }
 
+.horizontal-list.tight {
+    justify-content: start;
+    gap: 0.5rem;
+}
+
+.horizontal-list.wrap {
+    flex-wrap: wrap;
+}
+
 .tab-content {
     border-left: 1px solid #dee2e6;
     border-bottom: 1px solid #dee2e6;
@@ -156,6 +198,9 @@ ul.footer-link-list {
 .profile-link {
     color: black;
     text-decoration: none;
+}
+.contact-icon {
+    font-size: 125%;
 }
 .review-count {
     color: #2b3035;

@@ -13,7 +13,8 @@ public class Hustle
     public static Hustle Empty { get; } = new()
     {
         Type = HustleType.Sponsor,
-        Title = "Loading..."
+        Title = "Loading...",
+        OwnerProfile = Profile.Empty
     };
     
     public Guid HustleId { get; set; }
@@ -29,6 +30,7 @@ public class Hustle
     public decimal? MinimumPrice { get; set; }
     public decimal? MaximumPrice { get; set; }
     public HustleOption[] Options { get; set; } = [];
+    public string[] Categories { get; set; } = [];
 }
 
 public class ActiveHustle

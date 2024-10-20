@@ -234,7 +234,7 @@ if (false)
     }
 }
 
-if (true)
+if (false)
 {
     var tinyPng = new TinyPngClient("9jLSW686GCwqJLGb6K17dvBwzpB458jW");
     foreach (var image in Directory.GetFiles(@"C:\Work\Funtoh\Data\GeneratedHustles"))
@@ -245,6 +245,43 @@ if (true)
         var response = await tinyPng.Shrink(image).Convert(ImageType.Jpeg).Download();
         await File.WriteAllBytesAsync(destination, response.ImageData);
     }
+}
+
+if (false)
+{
+    var context = new DataContext();
+
+    var sb = new StringBuilder();
+    var hustles = context.Hustles.ToArray();
+    foreach (var hustle in hustles)
+    {
+        sb.Append("* ").Append(hustle.Title).Append(": ").AppendLine(hustle.Description);
+    }
+
+    var categories = await generator.GenerateList<Category>(
+        "I need to categorize these hustles to help users search for them. Each hustle must have three or more categories. Please review the list of hustles then list all of the categories.",
+        "", "# Hustles:",
+        sb.ToString());
+
+    var categoryNames = categories.Select(x => $"* {x.CategoryName}").ToLineDelimited();
+    
+    Console.WriteLine("Categories:");
+    Console.WriteLine(categoryNames);
+    
+    Console.WriteLine();
+    Console.WriteLine("Hustles:");
+    foreach (var hustle in hustles)
+    {
+        var response = await generator.QuickGenerate<Categories>(
+            "From the provided list of categories, please provide a list of categories that best match the hustle.",
+            $"Hustle Title: {hustle.Title}",
+            $"Hustle Description: {hustle.Description}",
+            "", "# Categories", categoryNames);
+        hustle.Categories = response.CategoryNames;
+        Console.WriteLine($"* {hustle.Title}: {response.CategoryNames.ToCommaDelimited()}");
+    }
+    
+    context.SaveDataFile();
 }
 
 Brand[] GetBrands() => DeserializeFile<Brand>();
@@ -290,3 +327,5 @@ record Person(string Name, int Age, string Pronouns);
 
 record OccupationResponse(string[] Occupations);
 record DeliverableResponse(string[] Deliverables);
+record Category(string CategoryName);
+record Categories(string[] CategoryNames);

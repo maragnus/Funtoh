@@ -1,0 +1,36 @@
+﻿@page "/search"
+
+<div class="container-md">
+    <div class="row justify-content-md-center p-4"> 
+        <div class="col-12 mb-4">
+            <h1 class="h2 text-secondary text-center">Which market are you in?</h1>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <img src="img/location.webp" class="card-img-top" alt="Select your market"/>
+                <div class="card-body">
+                    <p class="card-text">
+                        Alright, hold up, Hotshot! 🕶️ Before you go diving into the Hustle-fest, we gotta figure out where in the world you are. Don't worry, it’s easy-peasy.
+                    </p>
+                    <ul class="card-text">
+                        <li>You can enter a zip code—Yeah, the ol’ trusty numbers game.📍</li>
+                        <li>Or drop your city and state—’Cause you’re fancy like that. 🏙️</li>
+                        <li>Or, better yet, just hit the button, and I’ll do the location magic for you! 🎯</li>
+                    </ul>
+                    <p class="card-text">
+                        Let’s lock in your market so you can start finding Hustles that are ready for your awesomeness. You’re welcome! 😎🔥
+                    </p>
+                    <div class="card-text">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA">
+                            <button class="btn btn-outline-secondary" type="button" id="button-location"><i class="fa-regular fa-location-dot"></i></button>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        <a class="btn btn-primary" href="/search/start">Let's Go!</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

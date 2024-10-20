@@ -13,5 +13,6 @@ public static class Extensions
     
     public static string ToLineDelimited<TItem>(this IEnumerable<TItem> items, Func<TItem, string> predicate) =>
         string.Join(Environment.NewLine, items.Select(predicate));
-
+    
+    public static IEnumerable<(int Index, T Item)> ToIndexedList<T>(this IEnumerable<T> list) => list.Select((item, index) => (index, item));
 }

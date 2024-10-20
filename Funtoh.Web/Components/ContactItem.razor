@@ -1,0 +1,71 @@
+﻿@using System.Text.RegularExpressions
+<div class="horizontal-list tight">
+    <div class="contact-icon">
+        <i class="@Icon"></i>
+    </div>
+    <div class="contact-value">
+        @Value
+    </div>
+    <div class="contact-verified">
+        @Verified
+    </div>
+</div>
+
+@code {
+    [Parameter] public Contact Contact { get; set; } = Contact.Empty;
+    private string Icon { get; set; } = "fa-regular fa-ellipsis";
+    private RenderFragment? Value { get; set; }
+    private RenderFragment? Verified { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Icon = Contact.ServiceName switch
+        {
+            "Email" => "fa-regular fa-envelope",
+            "Facebook" => "fa-brands fa-facebook",
+            "Instagram" => "fa-brands fa-instagram",
+            "LinkedIn" => "fa-brands fa-linkedin",
+            "Phone" => "fa-regular fa-mobile",
+            "Pinterest" => "fa-brands fa-pinterest",
+            "Reddit" => "fa-brands fa-reddit",
+            "Snapchat" => "fa-brands fa-snapchat",
+            "Soundcloud" => "fa-brands fa-soundcloud",
+            "Threads" => "fa-brands fa-threads",
+            "Tiktok" => "fa-brands fa-tiktok",
+            "Tumblr" => "fa-brands fa-tumblr",
+            "Twitch" => "fa-brands fa-twitch",
+            "Twitter" => "fa-brands fa-x-twitter",
+            "Vimeo" => "fa-brands fa-vimeo-v",
+            "WeChat" => "fa-brands fa-weixin",
+            "WhatsApp" => "fa-brands fa-whatsapp",
+            "YouTube" => "fa-brands fa-youtube",
+            _ => "fa-regular fa-ellipsis"
+        };
+
+        var value = Contact.Value;
+
+        if (Contact.ServiceName is "Phone")
+        {
+            value = Regex.Replace(value, @"\d{4}$", "****", RegexOptions.Compiled);
+            Value = @<span class="contact-phone">@value</span>;
+            Verified = @<i class="fa-regular fa-badge-check"></i>;
+        }
+        else if (Contact.ServiceName is "Email")
+        {
+            value = Regex.Replace(value, @"^[^@]+", "****", RegexOptions.Compiled);
+            Value = @<span class="contact-email">@value</span>;
+            Verified = @<i class="fa-regular fa-badge-check"></i>;
+        }
+        else
+        {
+            Verified = null;
+            Value = Contact.Publicity switch
+            {
+                ContactPublicity.Private => @<span class="contact-private text-muted">Private</span>,
+                ContactPublicity.Collaborators => @<span class="contact-collab text-muted">Available to collaborators</span>,
+                ContactPublicity.Public => @<span class="contact-public">@value</span>,
+            };
+        }
+    }
+
+}

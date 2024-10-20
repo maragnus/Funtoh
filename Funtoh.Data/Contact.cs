@@ -28,4 +28,6 @@ public record Contact(string ServiceName, string Value, int? FollowerCount, Cont
         "WhatsApp",
         "YouTube",
     };
+
+    public static Contact Empty { get; } = new Contact("Phone", "", null, ContactPublicity.Private);
 }

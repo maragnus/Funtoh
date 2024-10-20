@@ -14,7 +14,7 @@
         "dotnetRunMessages": true,
         "launchBrowser": true,
         "applicationUrl": "http://localhost:5160",
-        "launchUrl": "http://localhost:5160/profiles",
+        "launchUrl": "http://localhost:5160/search/sponsor/hustles",
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
         }

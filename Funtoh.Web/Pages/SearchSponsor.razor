@@ -1,0 +1,103 @@
+﻿@page "/search/sponsor/hustles"
+@page "/search/sponsor/hustles/{HustleId:guid}"
+@page "/search/sponsor/hustles/{SimilarHustleId:guid}/similar"
+@page "/search/sponsor/hustles/{SimilarHustleId:guid}/similar/{HustleId:guid}"
+
+@rendermode InteractiveServer
+@layout AppLayout
+
+<div class="search-bar mt-4 mx-4">
+    <div class="input-group mb-3">
+        @if (SimilarHustle == null)
+        {
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+            <button class="btn btn-outline-secondary" type="button" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+        }
+        else
+        {
+            <span class="input-group-text">Similar to</span>
+            <div class="form-control" aria-label="Search query" aria-describedby="button-clear">
+                @SimilarHustle.Title
+            </div>
+            <a class="btn btn-outline-secondary" id="button-clear" href="/search/sponsor/hustles"><i class="fa-regular fa-x"></i> Start Over</a>
+        }
+    </div>
+</div>
+
+<main class="row mx-4">
+    <div class="col-12 col-md-4 col-lg-3 p-0 pe-2" style="height: 100%; overflow-y: auto">
+        <div class="vertical-list">
+            @foreach (var hustle in Hustles)
+            {
+                var url = SimilarHustleId.HasValue 
+                    ? $"/search/sponsor/hustles/{SimilarHustleId}/similar/{hustle.HustleId}"
+                    : $"/search/sponsor/hustles/{hustle.HustleId}";
+                <HustleCard Hustle="@hustle" Href="@url" HideBrand/>
+            }
+        </div>
+    </div>
+    <div class="col-12 col-md-8 col-lg-9 p-0 ps-2" style="height: 100%; overflow-y: auto">
+        @if (Hustle == Hustle.Empty)
+        {
+            <div class="px-5">
+                <p>Cue epic adventure music 🎶 Alright, hero! You’ve made it to the Hustle search page—your gateway to brand-boosting glory! 💥</p>
+                <p>So what’s next? You’ve got two options, my friend:</p>
+                <ul>
+                    <li>Select a Hustle that tickles your fancy and dive into the juicy details. 📋</li>
+                    <li>Refine your search if you’re looking for something specific—because why waste time when you already know what you want? 🎯</li>
+                </ul>
+                <p>The journey to promoting your brand starts here. Choose wisely, young Hustler! 🕶️🔥</p>
+            </div>
+        }
+        else
+        {
+            var hustleUrl = $"/hustles/{Hustle.HustleId}";
+            var similarUrl = $"/search/sponsor/hustles/{Hustle.HustleId}/similar";
+            var createUrl = $"/search/sponsor/create/{Hustle.HustleId}";
+            <HustleCard Hustle="@Hustle" ShowDescription ShowHustler/>
+            <div class="horizontal-list mt-4">
+                <a class="btn btn-primary" href="@hustleUrl">More information</a>
+                <a class="btn btn-primary" href="@similarUrl">Similar hustles</a>
+                <a class="btn btn-primary" href="@createUrl">Create a hustle</a>
+            </div>
+        }
+    </div>
+</main>
+
+@inject DataContext DataContext
+
+@code {
+    [Parameter] public Guid? HustleId { get; set; }
+    [Parameter] public Guid? SimilarHustleId { get; set; }
+    private Hustle[] AllHustles { get; set; } = [];
+    private Hustle[] Hustles { get; set; } = [];
+    private Hustle Hustle { get; set; } = Hustle.Empty;
+    private Hustle? SimilarHustle { get; set; }
+    private string? Query { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AllHustles = DataContext.Hustles.Where(hustle => hustle.Type == HustleType.Promoter).ToArray();
+    }
+
+    protected override void OnParametersSet()
+    {
+        Hustle = HustleId.HasValue ? DataContext.FindHustle(HustleId.Value) : Hustle.Empty;
+        SimilarHustle = SimilarHustleId.HasValue ? DataContext.FindHustle(SimilarHustleId.Value) : null;
+
+        if (SimilarHustle is null)
+        {
+            Hustles = AllHustles.Take(25).ToArray();
+            return;
+        }
+
+        var categories = SimilarHustle.Categories;
+        Hustles = AllHustles.Select(hustle => new { Count = hustle.Categories.Intersect(categories).Count(), Hustle = hustle})
+            .Where(item => item.Count > 0)
+            .OrderBy(item => item.Count)
+            .ThenBy(item => item.Hustle.HustleId)
+            .Select(item => item.Hustle)
+            .ToArray();
+    }
+
+}
