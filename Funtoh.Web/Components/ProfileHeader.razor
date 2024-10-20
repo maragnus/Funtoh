@@ -1,0 +1,85 @@
+﻿@{
+    var url = $"/profiles/{Profile.ProfileId}";
+    var imageUrl = $"/images/profiles/{Profile.ProfileId}.png";
+    var badgeClass = Profile.Level switch
+    {
+        ProfileLevel.Unverified => "d-none",
+        ProfileLevel.Verified => "badge badge-verified",
+        ProfileLevel.Silver => "badge badge-silver",
+        ProfileLevel.Gold => "badge badge-gold",
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    var badgeIcon = Profile.Level switch
+    {
+        ProfileLevel.Unverified => "d-none",
+        ProfileLevel.Verified => "fa-regular fa-badge-check",
+        ProfileLevel.Silver => "fa-solid fa-badge-check",
+        ProfileLevel.Gold => "fa-solid fa-badge-check",
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    var large = ShowReviews && ShowLanguages && ShowLocation;
+    var headerClass = 
+        "d-flex flex-row align-content-start justify-content-start mb-2 " 
+        + (large ? "large gap-4" : "gap-1");
+}
+
+<div class="@headerClass">
+    <div class="avatar me-2">
+        <a href="@url">
+            <img src="@imageUrl" class="img-fluid" alt="Profile image"/>
+        </a>
+    </div>
+    <div class="d-flex flex-column gap-1">
+        <div class="d-flex flex-row align-items-center justify-content-start gap-2">
+            <a href="@url" class="profile-name profile-link">
+                @Profile.FullName
+            </a>
+            @if (ShowLevel)
+            {
+                <span class="@badgeClass">
+                    <i class="@badgeIcon"></i>
+                    @Profile.Level
+                </span>
+            }
+        </div>
+        @if (ShowReviews)
+        {
+            <div>
+                @if (Profile.ReviewCount > 0)
+                {
+                    <i class="fa-solid fa-star"></i>
+                    <strong>@Profile.Review</strong>
+                    <span class="review-count">(<a href="@url">@Profile.ReviewCount</a >)</span>
+                }
+                else
+                {
+                    <strong>New User</strong>
+                }
+            </div>
+        }
+        @if (ShowLanguages || ShowLocation)
+        {
+            <div class="d-flex flex-row align-items-center justify-content-start gap-4">
+                @if (ShowLocation)
+                {
+                    <div>
+                        <i class="fa-solid fa-location-dot"></i> @Profile.Location
+                    </div>
+                }
+                @if (ShowLanguages)
+                {
+                    <div><i class="fa-solid fa-comment"></i> English</div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public Profile Profile { get; set; } = Profile.Empty;
+
+    [Parameter] public bool ShowLevel { get; set; }
+    [Parameter] public bool ShowReviews { get; set; }
+    [Parameter] public bool ShowLocation { get; set; }
+    [Parameter] public bool ShowLanguages { get; set; }
+}

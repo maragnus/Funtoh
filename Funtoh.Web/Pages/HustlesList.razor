@@ -1,0 +1,21 @@
+﻿@page "/hustles"
+
+<div class="row p-4">
+    @foreach (var hustle in Hustles)
+    {
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <HustleCard Hustle="@hustle" ShowHustler />
+        </div>
+    }
+</div>
+
+@inject DataContext DataContext
+
+@code {
+    private Hustle[] Hustles { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        Hustles = DataContext.Hustles.ToArray();
+    }
+}

@@ -1,0 +1,30 @@
+﻿<div class="card">
+    @if (Header is not null)
+    {
+        <div class="card-header">
+            @Header
+        </div>
+    }
+    <div class="card-body">
+        <ProfileHeader Profile="@Profile" ShowLevel ShowReviews/>
+        <div>
+            <i class="fa-solid fa-comment"></i> English
+        </div>
+        <div>
+            <i class="fa-solid fa-location-dot"></i> @Profile.Location
+        </div>
+    </div>
+    @if (Footer is not null)
+    {
+        <div class="card-footer">
+            @Footer
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter] public Profile Profile { get; set; } = Profile.Empty;
+    [Parameter] public RenderFragment? Header { get; set; }
+    [Parameter] public RenderFragment? Footer { get; set; }
+}

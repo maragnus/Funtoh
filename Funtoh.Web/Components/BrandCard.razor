@@ -1,0 +1,19 @@
+﻿@{
+    var brandUrl = $"/brands/{Brand.Name}";
+}
+
+<div class="card">
+    <div class="card-header heading">
+        <a href="@brandUrl" class="profile-link text-primary">@Brand.Name</a>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            @Brand.Description
+        </p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Brand Brand { get; set; }
+}

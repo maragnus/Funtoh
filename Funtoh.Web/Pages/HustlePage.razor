@@ -1,0 +1,127 @@
+﻿@page "/hustles/{HustleId:guid}"
+@page "/hustles/{HustleName}"
+@{
+    var applyUrl = $"/hustles/{Hustle.HustleId}/apply";
+}
+
+@inject DataContext DataContext
+
+<div class="container-md p-4 mb-4">
+    <div class="row">
+        @* <-- Left Column <-- *@
+        <div class="col-md-8 col-12 mb-4 vertical-list">
+            <HustleCard Hustle="@Hustle" ShowDescription/>
+
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    @foreach (var (index, option) in @Hustle.Options.ToIndexedList())
+                    {
+                        var first = index == 0;
+                        var control = $"option-panel-{index}";
+                        var href = $"#{control}";
+                        var id = $"option-tab-{index}";
+                        var aClass = first ? "nav-link active" : "nav-link";
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="@aClass" id="@id" data-bs-toggle="tab" data-bs-target="@href" role="tab" aria-controls="@control" aria-selected="@first">@option.Level</button>
+                        </li>
+                    }
+                </ul>
+                <div class="tab-content p-3" id="tab-content">
+                    @foreach (var (index, option) in @Hustle.Options.ToIndexedList())
+                    {
+                        var first = index == 0;
+                        var id = $"option-panel-{index}";
+                        var labelledby = $"option-tab-{index}";
+                        var divClass = first ? "tab-pane active" : "tab-pane";
+                        <div class="@divClass" id="@id" role="tabpanel" aria-labelledby="@labelledby">
+                            <div class="mb-4">
+                                <div class="heading text-tertiary mb-2">@option.Title</div>
+                                <div class="text-muted mb-2">@option.Description</div>
+                            </div>
+                            
+                            <div class="vertical-list gap-4">
+                                @{
+                                    decimal totalCost = 0;
+                                }
+                                @foreach (var phase in Hustle.Phases)
+                                {
+                                    var phaseOption = @phase.Options.Last(o => o.Level <= option.Level);
+                                    var cost = $"${phaseOption.Price}";
+                                    totalCost += phaseOption.Price ?? 0;
+
+                                    <div>
+                                        <div class="heading text-secondary mb-1">@phase.Title</div>
+                                        <div class="mb-2"><small class="text-muted">@phase.Description</small></div>
+                                        <div class="mb-2"><small class="text-muted"><strong>Deliverables</strong> (@(phase.DeliverySchedule.ToPhrase(phase.DeliveryIterations)))</small></div>
+                                        <ul class="m-1">
+                                            @foreach (var deliverable in phaseOption.Deliverables)
+                                            {
+                                                <li>@deliverable</li>
+                                            }
+                                        </ul>
+                                        <small><strong>Cost:</strong> @cost</small>
+                                    </div>
+                                }
+                                <div>
+                                    <strong>Estimated cost:</strong> $@(totalCost)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div>
+                @if (Hustle.Type == HustleType.Promoter)
+                {
+                    <button class="btn btn-primary" href="@applyUrl">Apply to Promote @Hustle.Brand</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" href="@applyUrl">Hire this Promoter</button>
+                }
+            </div>
+
+            @* <div class="heading text-secondary mt-4 mb-2">Related Hustles</div> *@
+        </div>
+
+        @* --> Right Column --> *@
+        <div class="col-md-4 col-12 mb-4">
+            <div class="vertical-list">
+                <ProfileCard Profile="@Hustle.OwnerProfile">
+                    <Header>
+                        <div class="text-secondary heading">
+                            @Hustle.Type
+                        </div>
+                    </Header>
+                </ProfileCard>
+                <div class="text-secondary heading">
+                    My Other Hustles
+                </div>
+                @foreach (var hustle in Hustle.OwnerProfile.Hustles.Where(hustle => hustle != Hustle))
+                {
+                    <HustleCard Hustle="hustle"/>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public Guid? HustleId { get; set; }
+    [Parameter] public string? HustleName { get; set; }
+
+    private Hustle Hustle { get; set; } = Hustle.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (HustleId.HasValue)
+            Hustle = DataContext.FindHustle(HustleId.Value);
+        else if (!string.IsNullOrEmpty(HustleName))
+            Hustle = DataContext.FindHustle(HustleName);
+        else
+            Hustle = Hustle.Empty;
+    }
+
+}

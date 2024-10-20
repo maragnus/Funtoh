@@ -1,0 +1,44 @@
+﻿@{
+    var imageUrl = $"/images/hustles/{Hustle.HustleId}.jpg";
+    var hustleUrl = $"/hustles/{Hustle.HustleId}";
+    var brandUrl = $"/brands/{Hustle.Brand}";
+}
+<div class="card">
+    <a href="@hustleUrl">
+        <img src="@imageUrl" class="card-img-top" alt="@Hustle.Title"/>
+    </a>
+    <div class="card-body">
+        <a href="@hustleUrl" class="profile-link">
+            <h5 class="card-title">@Hustle.Title</h5>
+        </a>
+
+        @if (ShowDescription)
+        {
+            <p class="card-text">@Hustle.Description</p>
+        }
+        <p class="card-text horizontal-list">
+            <small class="text-muted">$@Hustle.MinimumPrice to $@Hustle.MaximumPrice</small>
+            @if (Hustle.Type == HustleType.Sponsor)
+            {
+                <small class="text-muted">Promote <a href="@brandUrl" class="text-primary">@Hustle.Brand</a></small>
+            }
+            else
+            {
+                <small class="text-muted">Promote <span class="text-tertiary">Your Brand</span>!</small>
+            }
+        </p>
+    </div>
+
+    @if (ShowHustler)
+    {
+        <div class="card-footer">
+            <ProfileHeader Profile="@Hustle.OwnerProfile" ShowLocation ShowReviews/>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public Hustle Hustle { get; set; } = Hustle.Empty;
+    [Parameter] public bool ShowHustler { get; set; }
+    [Parameter] public bool ShowDescription { get; set; }
+}

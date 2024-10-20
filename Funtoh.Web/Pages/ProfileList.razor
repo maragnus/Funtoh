@@ -1,0 +1,22 @@
+﻿@page "/profiles"
+
+<div class="row p-4">
+@foreach (var profile in Profiles)
+{
+    <div class="col-lg-4 col-md-6 col-12 mb-4">
+        <ProfileCard Profile="profile"/>
+    </div>
+}
+</div>
+
+@inject DataContext DataContext
+
+@code {
+    private Profile[] Profiles { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        Profiles = DataContext.Profiles.ToArray();
+    }
+}
+

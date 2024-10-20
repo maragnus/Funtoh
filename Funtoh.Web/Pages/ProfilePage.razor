@@ -1,0 +1,114 @@
+﻿@page "/profiles/{ProfileId:guid}"
+@page "/profiles/{ProfileName}"
+
+<div class="container-md p-4">
+    <div class="row">
+        @* <-- Left Column <-- *@
+        
+        <div class="col-md-8 col-12">
+            @* Header *@
+            <ProfileHeader Profile="@Profile" ShowLevel ShowReviews ShowLocation ShowLanguages/>
+
+            @* About *@
+            <div class="heading text-secondary mt-4 mb-2">About me</div>
+            <div>@Profile.Description</div>
+
+            @* Specialties *@
+            @if (Profile.Specialties.IsNotEmpty())
+            {
+                <div class="heading text-secondary mt-4 mb-2">Specialties</div>
+                <div class="pl-4">
+                    @foreach (var category in Profile.Specialties.GroupBy(x => x.Category))
+                    {
+                        <div class="heading mt-4 mb-2">@category.Key</div>
+                        @foreach (var specialty in category)
+                        {
+                            <span class="badge rounded-pill bg-light text-dark p-2">@specialty.Name</span>
+                        }
+                    }
+                </div>
+            }
+            
+            @* Brands *@
+            @if (Profile.Brands.IsNotEmpty())
+            {
+            <div class="heading text-secondary mt-4 mb-2">Brands</div>
+            <div class="row">
+                @foreach (var brand in Profile.Brands)
+                {
+                <div class="col-12 mb-4">
+                    <BrandCard Brand="@brand"/>
+                </div>
+                }
+            </div>
+            }
+            
+            @* Hustles *@
+            @if (Profile.Hustles.IsNotEmpty())
+            {
+                <div class="heading text-secondary mt-4 mb-2">Hustles</div>
+                <div class="row">
+                    @foreach (var hustle in Profile.Hustles)
+                    {
+                        <div class="col-12 col-md-6 mb-4">
+                            <HustleCard Hustle="@hustle"/>
+                        </div>
+                    }
+                </div>
+            }
+
+
+        </div>
+        
+        @* --> Right Column --> *@
+        <div class="col-md-4 col-12">
+            @* Review *@
+            <div class="heading text-secondary mt-4 mb-2">Reviews</div>
+            @if (Profile.Reviews.IsEmpty())
+            {
+                <div class="empty-list">
+                    This profile may not have reviews yet, but don’t let that hold you back. Everyone starts somewhere, and this could be your chance to discover a future star! 🌟
+                </div>
+            }
+            else
+            {
+                <div class="vertical-list">
+                    @foreach (var review in Profile.Reviews)
+                    {
+                        <div class="card">
+                            <div class="card-header">
+                                <ProfileHeader Profile="@review.ReviewByProfile" ShowLevel ShowLocation/>
+                            </div>
+                            <div class="card-body review-text">
+                                @review.Comment
+                            </div>
+                            <div class="card-footer">
+                                Worked @review.HustleTitle
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@inject DataContext DataContext
+
+@code {
+    [Parameter] public Guid? ProfileId { get; set; }
+    [Parameter] public string? ProfileName { get; set; }
+
+    private Profile Profile { get; set; } = Profile.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (ProfileId.HasValue)
+            Profile = DataContext.FindProfile(ProfileId.Value);
+        else if (!string.IsNullOrEmpty(ProfileName))
+            Profile = DataContext.FindProfile(ProfileName);
+        else
+            Profile = Profile.Empty;
+    }
+
+}

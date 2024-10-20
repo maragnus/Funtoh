@@ -1,0 +1,54 @@
+﻿@page "/brands/{BrandName}"
+
+<div class="row p-4">
+    <div class="col-12">
+        <div class="h2 heading text-primary mt-4 mb-2">@Brand.Name</div>
+        <div>
+            @Brand.Description
+        </div>
+    </div>
+
+    <div class="col-12 col-md-7">
+        <div class="heading text-secondary mt-4 mb-2">Hustles</div>
+        <div class="vertical-list">
+            @foreach (var hustle in Hustles)
+            {
+                <HustleCard Hustle="@hustle" ShowHustler ShowDescription/>
+            }
+        </div>
+    </div>
+    <div class="col-12 col-md-5">
+        <div class="heading text-secondary mt-4 mb-2">Sponsors</div>
+        <div class="vertical-list">
+            @foreach (var profile in Profiles)
+            {
+                <ProfileCard Profile="@profile"/>
+            }
+        </div>
+    </div>
+
+</div>
+@inject DataContext DataContext
+
+@code {
+    [Parameter] public string BrandName { get; set; }
+
+    private Brand Brand { get; set; } = new Brand("", "");
+    private Profile[] Profiles { get; set; } = [];
+    private Hustle[] Hustles { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Profiles = DataContext.Profiles
+            .Where(p => p.Brands.Any(b => string.Equals(b.Name, BrandName, StringComparison.InvariantCultureIgnoreCase)))
+            .ToArray();
+
+        Hustles = Profiles.SelectMany(p => p.Hustles)
+            .Where(hustle => string.Equals(hustle.Brand, BrandName, StringComparison.InvariantCultureIgnoreCase))
+            .OrderBy(hustle => hustle.HustleId)
+            .ToArray();
+
+        Brand = Profiles.First().Brands.First(b => string.Equals(b.Name, BrandName, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+}
