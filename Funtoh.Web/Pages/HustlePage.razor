@@ -16,8 +16,10 @@
     <div class="row">
         @* <-- Left Column <-- *@
         <div class="col-md-8 col-12 mb-4 vertical-list">
+            @* Hustle Card *@
             <HustleCard Hustle="@Hustle" ShowDescription/>
 
+            @* Options *@
             <div>
                 <ul class="nav nav-tabs" role="tablist">
                     @foreach (var (index, option) in @Hustle.Options.ToIndexedList())
@@ -44,7 +46,7 @@
                                 <div class="heading text-tertiary mb-2">@option.Title</div>
                                 <div class="text-muted mb-2">@option.Description</div>
                             </div>
-                            
+
                             <div class="vertical-list gap-4">
                                 @{
                                     decimal totalCost = 0;
@@ -77,6 +79,7 @@
                 </div>
             </div>
 
+            @* Actions *@
             <div class="horizontal-list">
                 @if (Hustle.Type == HustleType.Promoter)
                 {
@@ -96,6 +99,7 @@
         @* --> Right Column --> *@
         <div class="col-md-4 col-12 mb-4">
             <div class="vertical-list">
+                @* Owner *@
                 <ProfileCard Profile="@Hustle.OwnerProfile">
                     <Header>
                         <div class="text-secondary heading">
@@ -103,6 +107,8 @@
                         </div>
                     </Header>
                 </ProfileCard>
+                
+                @* Owner's other hustles *@
                 <div class="text-secondary heading">
                     My Other Hustles
                 </div>

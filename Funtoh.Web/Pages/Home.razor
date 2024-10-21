@@ -1,4 +1,9 @@
 ﻿@page "/"
+
+@code {
+    public string? Query { get; set; }
+}
+
 @rendermode InteractiveServer
 
 <PageTitle>Funtoh | Find your ultimate side hustle</PageTitle>
@@ -10,9 +15,54 @@
     </div>
 </section>
 
+<section class="container-md mb-5">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button type="button" class="nav-link active" id="promoter-tab" data-bs-toggle="tab" data-bs-target="#promoter-panel" role="tab" aria-controls="promoter-panel" aria-selected="true">
+                <i class="fa-regular fa-sack-dollar"></i> Make some money
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button type="button" class="nav-link" id="sponsor-tab" data-bs-toggle="tab" data-bs-target="#sponsor-panel" role="tab" aria-controls="sponsor-panel" aria-selected="false">
+                <i class="fa-regular fa-megaphone"></i> Hire a promoter
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content p-3" id="tab-content">
+        <div class="tab-pane active" id="promoter-panel" role="tabpanel" aria-labelledby="promoter-tab">
+            <form action="/search/promoter/hustles" method="get">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" class="form-control" placeholder="Search sponsors looking for your skills!" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA" readonly>
+                    <button class="btn btn-outline-secondary" type="button" id="button-location">
+                        <i class="fa-regular fa-location-dot"></i>
+                    </button>
+                </div>
+            </form>
+        </div>      
+        <div class="tab-pane" id="sponsor-panel" role="tabpanel" aria-labelledby="sponsor-tab">
+            <form action="/search/sponsor/hustles" method="get">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" class="form-control" placeholder="Search for awesomely skilled promoters to boost your brand!" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA" readonly>
+                    <button class="btn btn-outline-secondary" type="button" id="button-location">
+                        <i class="fa-regular fa-location-dot"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
 <section class="container-md height-stretch">
     <h4 class="mb-5 d-flex justify-content-between align-items-center">
-        <div class="text-secondary text-uppercase">Featured Hustles</div> 
+        <div class="text-secondary text-uppercase">Featured Hustles</div>
         <button class="btn btn-primary">See More</button>
     </h4>
     <div class="row my-5">
@@ -33,7 +83,7 @@
             <div class="text-primary fw-bold mt-2">Grocery and shopping ads</div>
         </div>
     </div>
-    
+
     <div class="row my-5">
         <div class="col-12 d-flex flex-column align-items-center mb-5">
             <div class="mb-4">See how Funtoh promoters are shining a light on brands through creative social media posts.</div>
@@ -46,7 +96,9 @@
                         <img src="img/avatar.png" class="img-inline" alt=""/>
                         <span>Slacker's Arcade</span>
                     </div>
-                    <div><i class="fa-solid fa-ellipsis"></i></div>
+                    <div>
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </div>
                 </div>
                 <img src="img/post1.jpg" width="521" height="301" alt="Social media post" class="card-img card-img-center"/>
                 <div class="card-body">
@@ -63,7 +115,9 @@
                         <img src="img/avatar.png" class="img-inline" alt=""/>
                         <span>@@SoccerMomSally</span>
                     </div>
-                    <div><i class="fa-solid fa-ellipsis"></i></div>
+                    <div>
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </div>
                 </div>
                 <img src="img/post2.jpg" width="521" height="301" alt="Social media post" class="card-img card-img-center"/>
                 <div class="card-body">
@@ -84,7 +138,7 @@
             </div>
             <div class="col-md-6 col-sm-12 d-flex flex-column align-content-stretch mb-4">
                 <div class="text-center">Download the app today to get started!</div>
-                
+
                 <div style="font-size: 150%" class="mt-4 d-flex flex-row justify-content-evenly">
                     <img src="img/google-play.png" class="d-block img-inline" alt="Download Funtoh from Google Play"/>
                     <img src="img/apple-app-store.png" class="d-block img-inline" alt="Download Funtoh from App Store"/>
