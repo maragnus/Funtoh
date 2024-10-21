@@ -76,9 +76,23 @@ a, .btn-link {
     overflow: hidden;
 }
 
+.text-subtle {
+    color: rgba(0, 0, 0, 0.25) !important;
+}
+
 .funtoh-blue {
     background-color: var(--bs-primary);
     color: #fff;
+}
+.funtoh-blue .nav-link, .funtoh-blue .tab-content {
+    background: #fff;
+}
+.funtoh-blue .nav-link.active {
+    color: var(--bs-tertiary);
+}
+.funtoh-blue .nav-link {
+    background: #fff;
+    margin-right: 0.5rem;
 }
 
 ul.footer-link-list {

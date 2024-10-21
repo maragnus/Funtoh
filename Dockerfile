@@ -10,6 +10,7 @@ COPY ["Funtoh.Data/Funtoh.Data.csproj", "Funtoh.Data/"]
 COPY ["Funtoh.Web/Funtoh.Web.csproj", "Funtoh.Web/"]
 RUN dotnet restore "Funtoh.Web/Funtoh.Web.csproj"
 COPY . .
+RUN sh update-revision.sh $BUILD_REVISION
 WORKDIR "/src/Funtoh.Web"
 RUN dotnet build "Funtoh.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

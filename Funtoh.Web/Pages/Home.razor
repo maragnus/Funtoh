@@ -12,50 +12,51 @@
     <div class="container-md">
         <img src="/img/hero1.png" class="img-fluid" alt="The word on the street"/>
         <img src="/img/hero2.png" class="img-fluid" alt="The ultimate side hustle"/>
-    </div>
-</section>
-
-<section class="container-md mb-5">
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button type="button" class="nav-link active" id="promoter-tab" data-bs-toggle="tab" data-bs-target="#promoter-panel" role="tab" aria-controls="promoter-panel" aria-selected="true">
-                <i class="fa-regular fa-sack-dollar"></i> Make some money
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button type="button" class="nav-link" id="sponsor-tab" data-bs-toggle="tab" data-bs-target="#sponsor-panel" role="tab" aria-controls="sponsor-panel" aria-selected="false">
-                <i class="fa-regular fa-megaphone"></i> Hire a promoter
-            </button>
-        </li>
-    </ul>
-    <div class="tab-content p-3" id="tab-content">
-        <div class="tab-pane active" id="promoter-panel" role="tabpanel" aria-labelledby="promoter-tab">
-            <form action="/search/promoter/hustles" method="get">
-                <div class="input-group mb-3">
-                    <input type="text" name="q" class="form-control" placeholder="Search sponsors looking for your skills!" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-10 col-lg-10" style="position: relative; top: -4rem">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link active" id="promoter-tab" data-bs-toggle="tab" data-bs-target="#promoter-panel" role="tab" aria-controls="promoter-panel" aria-selected="true">
+                            <i class="fa-regular fa-sack-dollar"></i> Make some money
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" id="sponsor-tab" data-bs-toggle="tab" data-bs-target="#sponsor-panel" role="tab" aria-controls="sponsor-panel" aria-selected="false">
+                            <i class="fa-regular fa-megaphone"></i> Hire a promoter
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content p-3" id="tab-content">
+                    <div class="tab-pane active" id="promoter-panel" role="tabpanel" aria-labelledby="promoter-tab">
+                        <form action="/search/promoter/hustles" method="get">
+                            <div class="input-group mb-3">
+                                <input type="text" name="q" class="form-control" placeholder="Search sponsors looking for your skills!" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA" readonly>
+                                <button class="btn btn-outline-secondary" type="button" id="button-location">
+                                    <i class="fa-regular fa-location-dot"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="sponsor-panel" role="tabpanel" aria-labelledby="sponsor-tab">
+                        <form action="/search/sponsor/hustles" method="get">
+                            <div class="input-group mb-3">
+                                <input type="text" name="q" class="form-control" placeholder="Search for awesomely skilled promoters to boost your brand!" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA" readonly>
+                                <button class="btn btn-outline-secondary" type="button" id="button-location">
+                                    <i class="fa-regular fa-location-dot"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA" readonly>
-                    <button class="btn btn-outline-secondary" type="button" id="button-location">
-                        <i class="fa-regular fa-location-dot"></i>
-                    </button>
-                </div>
-            </form>
-        </div>      
-        <div class="tab-pane" id="sponsor-panel" role="tabpanel" aria-labelledby="sponsor-tab">
-            <form action="/search/sponsor/hustles" method="get">
-                <div class="input-group mb-3">
-                    <input type="text" name="q" class="form-control" placeholder="Search for awesomely skilled promoters to boost your brand!" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Zip code or city, state" aria-label="Location" aria-describedby="button-location" value="Philadelphia, PA" readonly>
-                    <button class="btn btn-outline-secondary" type="button" id="button-location">
-                        <i class="fa-regular fa-location-dot"></i>
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </section>
@@ -162,7 +163,7 @@
                 </ul>
             </div>
             <div class="col-12 text-center">
-                <div>Copyright &copy; 2024 Funtoh, LLC</div>
+                <div>Copyright &copy; 2024 Funtoh, LLC <span class="text-subtle">R-@Revision.BuildRevision</span></div>
             </div>
         </div>
     </div>
