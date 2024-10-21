@@ -7,11 +7,12 @@
 @layout AppLayout
 
 <div class="search-bar mt-4 mx-4">
+    <form action="/search/sponsor/hustles" method="get">
     <div class="input-group mb-3">
         @if (SimilarHustle == null)
         {
-            <input type="text" class="form-control" placeholder="Search" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
-            <button class="btn btn-outline-secondary" type="button" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+            <input type="text" name="q" class="form-control" placeholder="Search" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+            <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
         }
         else
         {
@@ -22,21 +23,32 @@
             <a class="btn btn-outline-secondary" id="button-clear" href="/search/sponsor/hustles"><i class="fa-regular fa-x"></i> Start Over</a>
         }
     </div>
+    </form>
 </div>
 
 <main class="row mx-4">
-    <div class="col-12 col-md-4 col-lg-3 p-0 pe-2" style="height: 100%; overflow-y: auto">
+    @{
+        var isHustleSelected = HustleId.HasValue;
+        var hidden = " d-none d-md-block d-lg-block";
+        var leftClass = 
+            "col-12 col-md-4 col-lg-3 p-0 pe-2 pb-4"
+            + (isHustleSelected ? hidden : "");
+        var rightClass = 
+                "col-12 col-md-8 col-lg-9 p-0 ps-md-2 ps-lg-2 pb-4"
+            + (isHustleSelected ? "" : hidden);
+    }
+    <div class="@leftClass" style="height: 100%; overflow-y: auto">
         <div class="vertical-list">
             @foreach (var hustle in Hustles)
             {
-                var url = SimilarHustleId.HasValue 
+                var url = SimilarHustleId.HasValue
                     ? $"/search/sponsor/hustles/{SimilarHustleId}/similar/{hustle.HustleId}"
                     : $"/search/sponsor/hustles/{hustle.HustleId}";
                 <HustleCard Hustle="@hustle" Href="@url" HideBrand/>
             }
         </div>
     </div>
-    <div class="col-12 col-md-8 col-lg-9 p-0 ps-2" style="height: 100%; overflow-y: auto">
+    <div class="@rightClass" style="height: 100%; overflow-y: auto">
         @if (Hustle == Hustle.Empty)
         {
             <div class="px-5">
@@ -54,6 +66,10 @@
             var hustleUrl = $"/hustles/{Hustle.HustleId}";
             var similarUrl = $"/search/sponsor/hustles/{Hustle.HustleId}/similar";
             var createUrl = $"/search/sponsor/create/{Hustle.HustleId}";
+            var backUrl = SimilarHustleId.HasValue
+                ? $"/search/sponsor/hustles/{SimilarHustleId}/similar"
+                : $"/search/sponsor/hustles#{HustleId?.ToString("N")}";
+            <a href="@backUrl" class="btn btn-primary mb-4 d-inline-block d-md-none d-lg-none"><i class="fa-regular fa-hand-back-point-left"></i> Back to results</a>
             <HustleCard Hustle="@Hustle" ShowDescription ShowHustler/>
             <div class="horizontal-list mt-4">
                 <a class="btn btn-primary" href="@hustleUrl">More information</a>
@@ -64,16 +80,18 @@
     </div>
 </main>
 
+@inject NavigationManager NavigationManager
 @inject DataContext DataContext
+@inject IJSRuntime Js
 
 @code {
+    [SupplyParameterFromQuery(Name = "q")] public string? Query { get; set; }
     [Parameter] public Guid? HustleId { get; set; }
     [Parameter] public Guid? SimilarHustleId { get; set; }
     private Hustle[] AllHustles { get; set; } = [];
     private Hustle[] Hustles { get; set; } = [];
     private Hustle Hustle { get; set; } = Hustle.Empty;
     private Hustle? SimilarHustle { get; set; }
-    private string? Query { get; set; }
 
     protected override void OnInitialized()
     {
@@ -98,6 +116,14 @@
             .ThenBy(item => item.Hustle.HustleId)
             .Select(item => item.Hustle)
             .ToArray();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        var fragment = new Uri(NavigationManager.Uri, UriKind.Absolute).Fragment.TrimStart('#');
+        if (!string.IsNullOrWhiteSpace(fragment))
+            await Js.InvokeVoidAsync("jumpTo", fragment);
     }
 
 }

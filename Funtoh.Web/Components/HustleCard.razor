@@ -2,8 +2,9 @@
     var imageUrl = $"/images/hustles/{Hustle.HustleId}.jpg";
     var hustleUrl = Href ?? $"/hustles/{Hustle.HustleId}";
     var brandUrl = $"/brands/{Hustle.Brand}";
+    var hustleId = Hustle.HustleId.ToString("N");
 }
-<div class="card">
+<div class="card" id="@hustleId">
     <a href="@hustleUrl">
         <img src="@imageUrl" class="card-img-top" alt="@Hustle.Title"/>
     </a>
