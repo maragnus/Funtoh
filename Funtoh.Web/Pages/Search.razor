@@ -1,0 +1,157 @@
+﻿@page "/search/{Role}/hustles"
+@page "/search/{Role}/hustles/{HustleId:guid}"
+@page "/search/{Role}/hustles/{SimilarHustleId:guid}/similar"
+@page "/search/{Role}/hustles/{SimilarHustleId:guid}/similar/{HustleId:guid}"
+
+@rendermode InteractiveServer
+@layout AppLayout
+
+<div class="search-bar mt-4 mx-4">
+    <form action="@($"/search/{Role}/hustles")" method="get">
+        <div class="input-group mb-3">
+            @if (SimilarHustle == null)
+            {
+                <input type="text" name="q" class="form-control" placeholder="Search" aria-label="Search query" aria-describedby="button-search" @bind-value="@Query">
+                <button class="btn btn-outline-secondary" type="submit" id="button-search"><i class="fa-regular fa-magnifying-glass"></i> Search</button>
+            }
+            else
+            {
+                <span class="input-group-text">Similar to</span>
+                <div class="form-control" aria-label="Search query" aria-describedby="button-clear">
+                    @SimilarHustle.Title
+                </div>
+                <a class="btn btn-outline-secondary" id="button-clear" href="/search/promoter/hustles"><i class="fa-regular fa-x"></i> Start Over</a>
+            }
+        </div>
+    </form>
+</div>
+
+<main class="row mx-4">
+    @{
+        var isHustleSelected = HustleId.HasValue;
+        var hidden = " d-none d-md-block d-lg-block";
+        var leftClass =
+            "col-12 col-md-4 col-lg-3 p-0 pe-2 pb-4"
+            + (isHustleSelected ? hidden : "");
+        var rightClass =
+            "col-12 col-md-8 col-lg-9 p-0 ps-md-2 ps-lg-2 pb-4"
+            + (isHustleSelected ? "" : hidden);
+    }
+    <div class="@leftClass" style="height: 100%; overflow-y: auto">
+        <HustleSearchResults Hustles="@Hustles" Role="@Role" SimilarHustleId="@SimilarHustleId" Query="@Query"/>
+    </div>
+    <div class="@rightClass" style="height: 100%; overflow-y: auto">
+        @if (Hustle == Hustle.Empty)
+        {
+            <div class="px-5">
+                @if (IsPromoter)
+                {
+                    <p>Alright, money-maker! 💰 You’re on the search page, which means you’re just one step away from finding the perfect Hustle to boost a brand and line your pockets. Cha-ching! 🤑</p>
+                    <p>Now, you’ve got two ways to kick this off:</p>
+                    <ul>
+                        <li>Select a Hustle that catches your eye and dive into the details. See what’s waiting for your skills! 🔍</li>
+                        <li>Refine your search if you’ve got a specific gig in mind—'cause why not aim for exactly what you want? 🎯</li>
+                    </ul>
+                    <p>Time to roll up those sleeves, grab a Hustle, and show ‘em what you’re made of! 💥</p>
+                } 
+                else if (IsSponsor)
+                {
+                    <p>Cue epic adventure music 🎶 Alright, hero! You’ve made it to the Hustle search page—your gateway to brand-boosting glory! 💥</p>
+                    <p>So what’s next? You’ve got two options, my friend:</p>
+                    <ul>
+                        <li>Select a Hustle that tickles your fancy and dive into the juicy details. 📋</li>
+                        <li>Refine your search if you’re looking for something specific—because why waste time when you already know what you want? 🎯</li>
+                    </ul>
+                    <p>The journey to promoting your brand starts here. Choose wisely, young Hustler! 🕶️🔥</p>
+                }
+            </div>
+        }
+        else
+        {
+            var hustleUrl = $"/hustles/{Hustle.HustleId}";
+            var similarUrl = $"/search/{Role}/hustles/{Hustle.HustleId}/similar";
+            var createUrl = $"/search/{Role}/create/{Hustle.HustleId}";
+            var backUrl = SimilarHustleId.HasValue
+                ? $"/search/{Role}/hustles/{SimilarHustleId}/similar"
+                : $"/search/{Role}/hustles#{HustleId?.ToString("N")}";
+            <div class="vertical-list gap-4">
+                <a href="@backUrl" class="btn btn-primary mb-4 d-inline-block d-md-none d-lg-none"><i class="fa-regular fa-hand-back-point-left"></i> Back to results</a>
+                <HustleCard Hustle="@Hustle" ShowDescription ShowHustler/>
+                <HustleCategories Hustle="@Hustle" />
+                <div class="horizontal-list">
+                    <a class="btn btn-primary" href="@hustleUrl">More information</a>
+                    <a class="btn btn-primary" href="@similarUrl">Similar hustles</a>
+                    <a class="btn btn-primary" href="@createUrl">Create a hustle</a>
+                </div>
+            </div>
+        }
+    </div>
+</main>
+
+@inject NavigationManager NavigationManager
+@inject DataContext DataContext
+@inject IJSRuntime Js
+
+@code {
+    [SupplyParameterFromQuery(Name = "q")] public string? Query { get; set; }
+    [Parameter] public Guid? HustleId { get; set; }
+    [Parameter] public Guid? SimilarHustleId { get; set; }
+    [Parameter] public string Role { get; set; } = "sponsor";
+    private Hustle[] Hustles { get; set; } = [];
+    private Hustle Hustle { get; set; } = Hustle.Empty;
+    private Hustle? SimilarHustle { get; set; }
+    private bool IsSponsor { get; set; }
+    private bool IsPromoter { get; set; }
+    
+    protected override void OnParametersSet()
+    {
+        IsSponsor = Role == "sponsor";
+        IsPromoter = Role == "promoter";
+
+        var hustles = new List<Hustle>();
+        
+        if (IsSponsor)
+            hustles.AddRange(DataContext.Hustles.Where(hustle => hustle.Type == HustleType.Promoter));
+        else if (IsPromoter)
+            hustles.AddRange(DataContext.Hustles.Where(hustle => hustle.Type == HustleType.Sponsor));
+        else
+            hustles.AddRange(DataContext.Hustles.ToArray());
+
+        Hustle = HustleId.HasValue ? DataContext.FindHustle(HustleId.Value) : Hustle.Empty;
+        SimilarHustle = SimilarHustleId.HasValue ? DataContext.FindHustle(SimilarHustleId.Value) : null;
+
+        if (SimilarHustle is null)
+        {
+            hustles = hustles.Take(25).ToList();
+        }
+        else
+        {
+            var categories = SimilarHustle.Categories;
+            hustles = hustles.Select(hustle => new { Count = hustle.Categories.Intersect(categories).Count(), Hustle = hustle })
+                .Where(item => item.Count > 0)
+                .OrderBy(item => item.Count)
+                .ThenBy(item => item.Hustle.HustleId)
+                .Select(item => item.Hustle)
+                .ToList();
+        }
+
+        // Filter hustles based on search
+        if (!string.IsNullOrWhiteSpace(Query))
+        {
+            hustles = hustles.Where(hustle => hustle.Categories.Contains(Query)).ToList();
+        }
+
+        if (!Enumerable.SequenceEqual(Hustles, hustles))
+            Hustles = hustles.ToArray();
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        var fragment = new Uri(NavigationManager.Uri, UriKind.Absolute).Fragment.TrimStart('#');
+        if (!string.IsNullOrWhiteSpace(fragment))
+            await Js.InvokeVoidAsync("jumpTo", fragment);
+        else if (HustleId is not null)
+            await Js.InvokeVoidAsync("jumpTo", Hustle.HustleId.ToString("N"));
+    }
+}

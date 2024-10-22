@@ -23,7 +23,7 @@
         + (large ? "large gap-4" : "gap-1");
 }
 
-<div class="@headerClass">
+<div class="@headerClass" @attributes="AdditionalAttributes">
     <div class="avatar me-2">
         <a href="@url">
             <img src="@imageUrl" class="img-fluid" alt="Profile image"/>
@@ -77,11 +77,13 @@
 
 @code {
     [Parameter] public Profile Profile { get; set; } = Profile.Empty;
-
+    
     [Parameter] public bool ShowLevel { get; set; }
     [Parameter] public bool ShowReviews { get; set; }
     [Parameter] public bool ShowLocation { get; set; }
     [Parameter] public bool ShowLanguages { get; set; }
+    
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     protected override void OnParametersSet()
     {

@@ -1,4 +1,4 @@
-﻿<div class="card">
+﻿<div class="card" @attributes="AdditionalAttributes">
     @if (Header is not null)
     {
         <div class="card-header">
@@ -23,8 +23,10 @@
 </div>
 
 @code {
-
     [Parameter] public Profile Profile { get; set; } = Profile.Empty;
+    
     [Parameter] public RenderFragment? Header { get; set; }
     [Parameter] public RenderFragment? Footer { get; set; }
+    
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 }

@@ -1,0 +1,14 @@
+﻿<div class="horizontal-list flex-wrap" @attributes="@AdditionalAttributes">
+    @foreach (var category in Hustle.Categories)
+    {
+        var categoryUrl = Hustle.Type == HustleType.Promoter
+            ? $"/search/sponsor/hustles?q={Uri.EscapeDataString(category)}"
+            : $"/search/promoter/hustles?q={Uri.EscapeDataString(category)}";
+        <a class="badge rounded-pill bg-light text-dark p-3" href="@categoryUrl">@category</a>
+    }
+</div>
+
+@code {
+    [Parameter] public Hustle Hustle { get; set; } = Hustle.Empty;
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

@@ -2,9 +2,8 @@
     var imageUrl = $"/images/hustles/{Hustle.HustleId}.jpg";
     var hustleUrl = Href ?? $"/hustles/{Hustle.HustleId}";
     var brandUrl = $"/brands/{Hustle.Brand}";
-    var hustleId = Hustle.HustleId.ToString("N");
 }
-<div class="card" id="@hustleId">
+<div class="card" @attributes="AdditionalAttributes">
     <a href="@hustleUrl">
         <img src="@imageUrl" class="card-img-top" alt="@Hustle.Title"/>
     </a>
@@ -43,8 +42,12 @@
 
 @code {
     [Parameter] public Hustle Hustle { get; set; } = Hustle.Empty;
+    
     [Parameter] public bool ShowHustler { get; set; }
     [Parameter] public bool ShowDescription { get; set; }
     [Parameter] public bool HideBrand { get; set; }
     [Parameter] public string? Href { get; set; }
+    
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
 }

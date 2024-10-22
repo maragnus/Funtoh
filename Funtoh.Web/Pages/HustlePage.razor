@@ -19,6 +19,8 @@
             @* Hustle Card *@
             <HustleCard Hustle="@Hustle" ShowDescription/>
 
+            <HustleCategories Hustle="@Hustle" />
+
             @* Options *@
             <div>
                 <ul class="nav nav-tabs" role="tablist">
@@ -53,21 +55,29 @@
                                 }
                                 @foreach (var phase in Hustle.Phases)
                                 {
-                                    var phaseOption = @phase.Options.Last(o => o.Level <= option.Level);
+                                    var phaseOption = phase.Options.LastOrDefault(o => o.Level <= option.Level);
+                                    if (phaseOption is null) continue;
+                                    
                                     var cost = $"${phaseOption.Price}";
                                     totalCost += phaseOption.Price ?? 0;
 
                                     <div>
                                         <div class="heading text-secondary mb-1">@phase.Title</div>
-                                        <div class="mb-2"><small class="text-muted">@phase.Description</small></div>
-                                        <div class="mb-2"><small class="text-muted"><strong>Deliverables</strong> (@(phase.DeliverySchedule.ToPhrase(phase.DeliveryIterations)))</small></div>
+                                        <div class="mb-2">
+                                            <small class="text-muted">@phase.Description</small>
+                                        </div>
+                                        <div class="mb-2">
+                                            <small class="text-muted"><strong>Deliverables</strong> (@(phase.DeliverySchedule.ToPhrase(phase.DeliveryIterations)))</small>
+                                        </div>
                                         <ul class="m-1">
                                             @foreach (var deliverable in phaseOption.Deliverables)
                                             {
                                                 <li>@deliverable</li>
                                             }
                                         </ul>
-                                        <small><strong>Cost:</strong> @cost</small>
+                                        <small>
+                                            <strong>Cost:</strong> @cost
+                                        </small>
                                     </div>
                                 }
                                 <div>
@@ -107,7 +117,7 @@
                         </div>
                     </Header>
                 </ProfileCard>
-                
+
                 @* Owner's other hustles *@
                 <div class="text-secondary heading">
                     My Other Hustles
