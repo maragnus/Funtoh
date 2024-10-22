@@ -80,7 +80,9 @@ public class DataContext
 
     public void SaveDataFile()
     {
-        using (var file = File.Create(@$"W:\Funtoh\Data\DataFile.json") ??
+        _profiles.Sort((x, y) => x.ProfileId.CompareTo(y.ProfileId));
+        _hustles.Sort((x, y) => x.HustleId.CompareTo(y.HustleId));
+        using (var file = File.Create(@$"W:\Funtoh\Funtoh.Data\DataFile.json") ??
                           throw new Exception($"Could write data file"))
             JsonSerializer.Serialize(file, new DataFile(_profiles.ToArray(), _hustles.ToArray()), JsonOptions);
     }

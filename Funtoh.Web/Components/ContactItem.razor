@@ -6,7 +6,7 @@
     <div class="contact-value">
         @Value
     </div>
-    <div class="contact-verified">
+    <div class="contact-verified text-primary">
         @Verified
     </div>
 </div>
@@ -25,29 +25,32 @@
             "Discord" => "fa-brands fa-discord",
             "Email" => "fa-regular fa-envelope",
             "Facebook" => "fa-brands fa-facebook",
+            "Fansly" => "fa-regular fa-ellipsis",
             "Flickr" => "fa-brands fa-flickr",
             "Github" => "fa-brands fa-github",
             "Google+" => "fa-brands fa-google-plus",
             "IMDB" => "fa-brands fa-imdb",
             "Instagram" => "fa-brands fa-instagram",
             "Kickstarter" => "fa-brands fa-kickstarter",
+            "Kik" => "fa-brands fa-kaggle",
             "LinkedIn" => "fa-brands fa-linkedin",
             "Medium" => "fa-brands fa-medium",
             "Meetup" => "fa-brands fa-meetup",
+            "OnlyFans" => "fa-regular fa-ellipsis",
             "OpenId" => "fa-brands fa-openid",
             "Patreon" => "fa-regular fa-patreon",
             "PayPal" => "fa-regular fa-paypal",
-            "Playstation" => "fa-regular fa-playstation",
             "Phone" => "fa-regular fa-mobile",
             "Pinterest" => "fa-brands fa-pinterest",
+            "Playstation" => "fa-regular fa-playstation",
             "Reddit" => "fa-brands fa-reddit",
             "Skype" => "fa-brands fa-skype",
             "Snapchat" => "fa-brands fa-snapchat",
-            "Spotify" => "fa-brands fa-spotify",
-            "Steam" => "fa-brands fa-steam",
-            "StackOverflow" => "fa-brands fa-stack-overflow",
-            "StackExchange" => "fa-brands fa-stack-exchange",
             "Soundcloud" => "fa-brands fa-soundcloud",
+            "Spotify" => "fa-brands fa-spotify",
+            "StackExchange" => "fa-brands fa-stack-exchange",
+            "StackOverflow" => "fa-brands fa-stack-overflow",
+            "Steam" => "fa-brands fa-steam",
             "Stripe" => "fa-brands fa-stripe",
             "Threads" => "fa-brands fa-threads",
             "Tiktok" => "fa-brands fa-tiktok",
@@ -55,21 +58,19 @@
             "Twitch" => "fa-brands fa-twitch",
             "Twitter" => "fa-brands fa-x-twitter",
             "Upwork" => "fa-brands fa-upwork",
+            "VK" => "fa-brands fa-vk",
             "Vimeo" => "fa-brands fa-vimeo-v",
-            "Weibo" => "fa-brands fa-weibo",
             "WeChat" => "fa-brands fa-weixin",
+            "Weibo" => "fa-brands fa-weibo",
             "WhatsApp" => "fa-brands fa-whatsapp",
             "Wordpress" => "fa-brands fa-wordpress",
-            "YouTube" => "fa-brands fa-youtube",
+            "Xbox" => "fa-regular fa-xbox",
             "Yelp" => "fa-brands fa-yelp",
-            "VK" => "fa-brands fa-vk",
-            "Kik" => "fa-brands fa-kaggle",
-            "Fansly" => "fa-regular fa-ellipsis",
-            "OnlyFans" => "fa-regular fa-ellipsis",
+            "YouTube" => "fa-brands fa-youtube",
             _ => "fa-regular fa-ellipsis"
         };
 
-        var value = Contact.Value;
+        var value = Contact.Value.Trim();
 
         if (Contact.ServiceName is "Phone")
         {
@@ -85,6 +86,9 @@
         }
         else
         {
+            if (value.Contains("/"))
+                value = Regex.Replace(value.TrimEnd('/'), ".*\\/", "");
+            
             Verified = null;
             Value = Contact.Publicity switch
             {

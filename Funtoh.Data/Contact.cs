@@ -9,24 +9,13 @@ public enum ContactPublicity
 
 public record Contact(string ServiceName, string Value, int? FollowerCount, ContactPublicity Publicity)
 {
-    private static IEnumerable<string> ServiceNames => new[]
+    public static IEnumerable<string> ServiceNames => new HashSet<string>
     {
-        "Email",
-        "Facebook",
-        "Instagram",
-        "LinkedIn",
-        "Phone",
-        "Reddit", 
-        "Snapchat",
-        "Threads",
-        "Tiktok",
-        "Tumblr",
-        "Twitch",
-        "Twitter",
-        "Vevo",
-        "WeChat",
-        "WhatsApp",
-        "YouTube",
+        "Bluesky", "Discord", "Email", "Facebook", "Flickr", "Github", "Google+", "IMDB", "Instagram", "Kickstarter",
+        "LinkedIn", "Medium", "Meetup", "OpenId", "Patreon", "PayPal", "Phone", "Pinterest", "Playstation", "Reddit",
+        "Skype", "Snapchat", "Soundcloud", "Spotify", "StackExchange", "StackOverflow", "Steam", "Stripe", "Threads",
+        "Tiktok", "Tumblr", "Twitch", "Twitter", "Upwork", "VK", "Vimeo", "WeChat", "Weibo", "WhatsApp", "Wordpress",
+        "Yelp", "YouTube", "Xbox"
     };
 
     public static Contact Empty { get; } = new Contact("Phone", "", null, ContactPublicity.Private);

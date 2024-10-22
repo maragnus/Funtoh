@@ -284,6 +284,29 @@ if (false)
     context.SaveDataFile();
 }
 
+if (true)
+{
+    var services = Contact.ServiceNames.ToCommaDelimited();
+    var context = new DataContext();
+   
+    foreach (var profile in context.Profiles)
+    {
+        var response = await generator.GenerateList<Contact>(
+            "Based on the profile below, provide four to eight relevant, fictitious services that this person would have. Be sure to include an email address and phone.",
+            $"# Profile",
+            $"* Name: {profile.FullName}",
+            $"* Description: {profile.Description}",
+            $"* Ethnicity: {profile.Ethnicity}",
+            $"* Personality: {profile.Personality}",
+            $"* Brands: {profile.Brands.Select(b=>b.Name).ToCommaDelimited()}",
+            $"* Specialties: {profile.Specialties.Select(b=>b.Name).ToCommaDelimited()}",
+            "", "# Services: ", services);
+        profile.Contacts = response;
+    }
+    
+    context.SaveDataFile();
+}
+
 Brand[] GetBrands() => DeserializeFile<Brand>();
 Specialty[] GetSpecialty() => DeserializeFile<Specialty>();
 Profile[] GetSponsors() => DeserializeFile<Profile>("Sponsor");
