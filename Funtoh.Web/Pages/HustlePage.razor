@@ -124,7 +124,10 @@
                 </div>
                 @foreach (var hustle in Hustle.OwnerProfile.Hustles.Where(hustle => hustle != Hustle))
                 {
-                    <HustleCard Hustle="hustle"/>
+                    var url = $"/hustles/{hustle.HustleId}";
+                    <NavLink href="@url" Match="NavLinkMatch.All" class="text-decoration-none">
+                        <HustleCard Hustle="@hustle" />
+                    </NavLink>
                 }
             </div>
         </div>

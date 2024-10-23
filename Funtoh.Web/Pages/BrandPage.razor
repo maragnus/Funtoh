@@ -13,7 +13,10 @@
         <div class="vertical-list">
             @foreach (var hustle in Hustles)
             {
-                <HustleCard Hustle="@hustle" ShowHustler ShowDescription/>
+                var url = $"/hustles/{hustle.HustleId}";
+                <NavLink href="@url" Match="NavLinkMatch.All" class="text-decoration-none">
+                    <HustleCard Hustle="@hustle" ShowHustler ShowDescription/>
+                </NavLink>
             }
         </div>
     </div>

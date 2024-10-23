@@ -1,17 +1,22 @@
-﻿<div class="vertical-list">
+﻿@rendermode InteractiveServer
+
+<div class="vertical-list">
     @foreach (var hustle in Hustles)
     {
         var id = hustle.HustleId.ToString("N");
         var url = SimilarHustleId.HasValue
-            ? $"/search/{Role}/hustles/{SimilarHustleId}/similar/{hustle.HustleId}"
-            : $"/search/{Role}/hustles/{hustle.HustleId}";
+            ? $"search/{Role}/hustles/{SimilarHustleId}/similar/{hustle.HustleId}"
+            : $"search/{Role}/hustles/{hustle.HustleId}";
         if (!string.IsNullOrEmpty(Query))
             url += "?q=" + Uri.EscapeDataString(Query);
-        <HustleCard Hustle="@hustle" Href="@url" id="@id"/>
+        <NavLink href="@url" Match="NavLinkMatch.All" class="text-decoration-none">
+            <HustleCard @key="@hustle.HustleId" Hustle="@hustle" Href="@url" IsSelected="@(SelectedHustle?.HustleId == hustle.HustleId)" id="@id"/>
+        </NavLink>
     }
 </div>
 
 @code {
+    [Parameter] public Hustle? SelectedHustle { get; set; }
     [Parameter] public Hustle[] Hustles { get; set; } = [];
     [Parameter] public string Role { get; set; } = "sponsor";
     [Parameter] public string? Query { get; set; }

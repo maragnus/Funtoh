@@ -6,6 +6,7 @@
 @rendermode InteractiveServer
 @layout AppLayout
 
+@* Search bar *@
 <div class="search-bar mt-4 mx-4">
     <form action="@($"/search/{Role}/hustles")" method="get">
         <div class="input-group mb-3">
@@ -37,9 +38,13 @@
             "col-12 col-md-8 col-lg-9 p-0 ps-md-2 ps-lg-2 pb-4"
             + (isHustleSelected ? "" : hidden);
     }
+    
+    @* Search Results *@
     <div class="@leftClass" style="height: 100%; overflow-y: auto">
         <HustleSearchResults Hustles="@Hustles" Role="@Role" SimilarHustleId="@SimilarHustleId" Query="@Query"/>
     </div>
+    
+    @* Selected Hustle *@
     <div class="@rightClass" style="height: 100%; overflow-y: auto">
         @if (Hustle == Hustle.Empty)
         {
@@ -138,7 +143,11 @@
         // Filter hustles based on search
         if (!string.IsNullOrWhiteSpace(Query))
         {
-            hustles = hustles.Where(hustle => hustle.Categories.Contains(Query)).ToList();
+            hustles = hustles.Where(hustle => 
+                string.Equals(hustle.Brand, Query, StringComparison.InvariantCultureIgnoreCase) 
+                || hustle.Categories.Any(c => c.Contains(Query, StringComparison.InvariantCultureIgnoreCase))
+                || hustle.Title.Contains(Query, StringComparison.InvariantCultureIgnoreCase)
+                || hustle.Description.Contains(Query, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
         if (!Enumerable.SequenceEqual(Hustles, hustles))

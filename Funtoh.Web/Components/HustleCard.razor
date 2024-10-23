@@ -1,16 +1,13 @@
 ﻿@{
     var imageUrl = $"/images/hustles/{Hustle.HustleId}.jpg";
-    var hustleUrl = Href ?? $"/hustles/{Hustle.HustleId}";
     var brandUrl = $"/brands/{Hustle.Brand}";
 }
-<div class="card" @attributes="AdditionalAttributes">
-    <a href="@hustleUrl">
-        <img src="@imageUrl" class="card-img-top" alt="@Hustle.Title"/>
-    </a>
+<div class="card position-relative hustle-card" @attributes="AdditionalAttributes">
+    <div class="active-overlay right-arrow"></div>
+    <img src="@imageUrl" class="card-img-top" alt="@Hustle.Title"/>
+  
     <div class="card-body">
-        <a href="@hustleUrl" class="profile-link">
-            <h5 class="card-title">@Hustle.Title</h5>
-        </a>
+        <h5 class="card-title">@Hustle.Title</h5>
 
         @if (ShowDescription)
         {
@@ -22,7 +19,7 @@
             {
                 @if (Hustle.Type == HustleType.Sponsor)
                 {
-                    <small class="text-muted">Promote <a href="@brandUrl" class="text-primary">@Hustle.Brand</a></small>
+                    <small class="text-muted">Promote <NavLink href="@brandUrl" class="text-primary">@Hustle.Brand</NavLink></small>
                 }
                 else
                 {
@@ -42,11 +39,11 @@
 
 @code {
     [Parameter] public Hustle Hustle { get; set; } = Hustle.Empty;
-    
+
+    [Parameter] public bool IsSelected { get; set; }
     [Parameter] public bool ShowHustler { get; set; }
     [Parameter] public bool ShowDescription { get; set; }
     [Parameter] public bool HideBrand { get; set; }
-    [Parameter] public string? Href { get; set; }
     
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
