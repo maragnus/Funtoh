@@ -88,10 +88,26 @@ a, .btn-link {
     flex-grow: 0;
 }
 
+.app-layout > div.search-bar {
+    flex: 1;
+    flex-grow: 0;
+}
+
 .app-layout > main {
     flex-grow: 1;
     min-height: 0;
     overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .app-layout {
+        height: inherit;
+        overflow: initial;
+    }
+
+    .app-layout > main {
+        overflow: initial;
+    }
 }
 
 .text-subtle {

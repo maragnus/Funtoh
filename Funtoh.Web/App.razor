@@ -35,7 +35,7 @@
         const bottom = (window.innerHeight || document.documentElement.clientHeight) + 15;
        
         if (bounding.top < top || bounding.bottom > bottom)
-            element.scrollIntoView({ block: "center" });        
+            element.scrollIntoView({ block: "center", behavior: "instant" });        
     }
 </script>
 </body>
